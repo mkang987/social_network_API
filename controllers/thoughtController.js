@@ -81,6 +81,6 @@ module.exports = {
             ? res.status(404).json({ message: 'No message found' })
             : res.json(thought)
         )
-        .catch((err) => res.status(500).json(err);)
+        .catch((err) => res.status(500).json(err));
     },
 };

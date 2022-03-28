@@ -31,11 +31,15 @@ module.exports = {
     createUser(req, res) {
         User.create(req.body)
             .then((user) => res.json(user))
-            .catch((err) => res.status(500).json(err);)
+            .catch((err) => res.status(500).json(err));
     },
     //Update user
     updateUser(req, res) {
-        User.findOneAndUpdate({ _id: req.params.userId })
+        User.findOneAndUpdate(
+            { _id: req.params.userId },
+            { $set: req.body },
+            { runValidators: true, new: true}
+            )
             .then((user) =>
                 !user
                 ? res.status(404).json({ message: 'No user with ID found' })
@@ -65,13 +69,13 @@ module.exports = {
                 ? res.status(404).json({ message: 'No user with ID found' })
                 : res.json(user)
         )
-        .catch((err) => res.status(500).json(err);)
+        .catch((err) => res.status(500).json(err));
     },
     //Remove a friend
     removeFriend(req, res) {
         User.findOneAndDelete(
             { _id: req.params.userId },
-            { $pull: { friend: { friendId: req.params.friendId } } },
+            { $pull: { friends: req.params.friendId  } },
             { runValidators: true, new: true }
         )
         .then((user) => 
